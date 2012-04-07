@@ -15,13 +15,14 @@
   var id;
   socket.emit('newClient', function (myId) {
     id = myId;
-    $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://sockets.chrisrhoden.com/mobile?sessionId=" + id)
+    $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://sockets.chrisrhoden.com/mobile?session_id=" + id)
   });
   socket.on('partnerConnected', function() {
     $('#qr-container').hide();
     $('#video-container').show();
     setInterval(function() { if (currentTime > videoEl.currentTime || currentTime < videoEl.currentTime) {
       socket.emit('timeCode', currentTime = videoEl.currentTime) } }, 50);
+    socket.emit('videoDuration', videoEl.duration);
   });
   socket.on('addBookmark', function(time) {
     bookmarks.append('<li>' + time + '</li>');

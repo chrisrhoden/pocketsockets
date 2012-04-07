@@ -37,6 +37,10 @@ io.sockets.on('connection' , function (socket) {
       session.mobileSocket.emit('timeCode', time);
     });
 
+    socket.on('videoDuration', function(time) {
+      session.mobileSocket.emit('videoDuration', time);
+    });
+
   });
 
   socket.on('joinSession', function(id, callback) {

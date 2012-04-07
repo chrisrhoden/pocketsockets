@@ -6,7 +6,7 @@
       <div class="progress progress-success" id='button'>
         <div class="bar btn-success" style="width: 33%;"> </div>
         <div class="timestamp">
-        <span id='time-code'>01:05 / 30:35</span><br />
+        <span id='time-code'>01:05</span> / <span id='duration'>30:35</span><br />
         <span style="font-size:18px;">click to bookmark this moment</span>
         </div>
       </div>
@@ -56,6 +56,25 @@
 
   socket.on('timeCode', function (time) {
     currentTime = time;
-    timeCodeEl.html(time);
+    timeCodeEl.html(timeToCode(time));
   });
+
+  socket.on('videoDuration', function(time) {
+    $('#duration').html(timeToCode(time));
+  });
+
+
+  function timeToCode(secs)
+{
+    var hours = Math.floor(secs / (60 * 60));
+
+    var divisor_for_minutes = secs % (60 * 60);
+    var minutes = Math.floor(divisor_for_minutes / 60);
+
+    var divisor_for_seconds = divisor_for_minutes % 60;
+    var seconds = Math.ceil(divisor_for_seconds);
+
+    var msecs = Math.ceil((secs % 1) * 100);
+    return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + '.' + (msecs < 10 ? '0' : '') msecs;
+}
 </script>
