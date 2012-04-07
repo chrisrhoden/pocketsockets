@@ -2,7 +2,7 @@
   <img id="qr" />
 </div>
 <div id="video-container" style="display:none">
-  <div id="video"><video id='videoel' src="/3011hack.mp4" controls /></div>
+  <div id="video"><video id='videoel' src="/3011hack.mp4" /></div>
 </div>
 <ul id="bookmarks"></ul>
 <ul id="notifications"></ul>
@@ -33,6 +33,22 @@
     width: 640px;
     margin: 0 auto;
   }
+
+  #notifications {
+    list-style-type: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  #notifications li {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+    padding: 5px 25px;
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+    margin: 10px;
+  }
 </style>
 <script>
   var socket = io.connect();
@@ -49,7 +65,7 @@
     $('#qr-container').animate({'top': -400}, function() {
       $(this).hide();
       $('body').css({background:"#000"})
-      $('#video-container').fadeIn( function () {
+      $('#video-container').fadeIn(function () {
         videoEl.play();
       });
     });
@@ -59,11 +75,11 @@
   });
   socket.on('addBookmark', function(time) {
     bookmarks.append("<li>" + timeToCode(time) + '</li>');
-    var notification = $(document.createElement('li')).append("Added bookmark: " + timeToCode(time));
+    var notification = $(document.createElement('li')).append("Added bookmark: " + timeToCode(time) + "<br />\"" + getTextForTime(time) + "\"");
     notifications.append(notification);
     setTimeout(function() { notification.animate({'opacity':0}, function () {
       $(this).slideUp();
-    })}, 1000);
+    })}, 2000);
   });
 </script>
 
