@@ -1,18 +1,22 @@
 Mobile
 <div id='time-code'></div>
+<ul id='bookmarks'></ul>
 <script>
   var socket = io.connect()
   var timeCodeEl = $('#time-code');
+  var currentTime = 0;
   var id;
   socket.emit('joinSession', <%= sessionId %>, function () {
     $('body').append("You're connected to a session");
     $('body').append('<button>Press Me</button');
     $('button').click(function() {
-      socket.emit('buttonPressed');
+      socket.emit('addBookmark', currentTime);
+      $('#bookmarks').append("<li>"+currentTime+"</li>");
     });
   });
 
   socket.on('timeCode', function (time) {
+    currentTime = time;
     timeCodeEl.html(time);
   });
 </script>

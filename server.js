@@ -46,8 +46,8 @@ io.sockets.on('connection' , function (socket) {
     session.browserSocket.emit('partnerConnected', {});
     callback();
 
-    socket.on('buttonPressed', function () {
-      session.browserSocket.emit('buttonPressed');
+    socket.on('addBookmark', function (time) {
+      session.browserSocket.emit('addBookmark', time);
     });
   });
 

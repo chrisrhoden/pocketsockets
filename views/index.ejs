@@ -5,10 +5,12 @@
 <div id="video-container" style="display:none">
   <div id="video"><video id='videoel' src="/3011hack.mp4" controls /></div>
 </div>
+<ul id="bookmarks"></ul>
 <script src="/jquery.jplayer.min.js"></script>
 <script>
   var socket = io.connect();
   var videoEl = $('#videoel')[0];
+  var bookmarks = $('#bookmarks');
   var id;
   socket.emit('newClient', function (myId) {
     id = myId;
@@ -18,8 +20,8 @@
     $('#qr-container').hide();
     $('#video-container').show();
   });
-  socket.on('buttonPressed', function() {
-    $('body').append('button pressed' + new Date);
+  socket.on('addBookmark', function(time) {
+    bookmarks.append('<li>' + time + '</li>');
   });
   setInterval(function() { socket.emit('timeCode', videoEl.currentTime) }, 200);
 </script>
