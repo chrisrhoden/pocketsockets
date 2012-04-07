@@ -13,11 +13,11 @@ app.configure(function() {
 })
 
 app.get('/', function(req, res) {
-  res.render('index.jade', {title:"Hi"});
+  res.render('index.ejs', {title:"Hi"});
 });
 
 app.get('/mobile', function(req, res) {
-  res.render('mobile.jade', {title:"mobile!", sessionId:req.params['session_id'] || '0' });
+  res.render('mobile.ejs', {title:"mobile!", sessionId:req.params['session_id'] || '0' });
 });
 
 

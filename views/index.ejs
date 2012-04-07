@@ -1,9 +1,10 @@
-#qr-container
-  img#qr
-  h2 scan me
-#video-container(style="display:none")
-  | You're connected
-script
+<div id="qr-container">
+  <img id="qr" />
+  <h2>scan me</h2>
+<div id="video-container" style="display:none">
+  You're connected
+</div>
+<script>
   var socket = io.connect()
   var id;
   socket.emit('newClient', function (myId) {
@@ -17,3 +18,4 @@ script
   socket.on('buttonPressed', function() {
     $('body').append('button pressed' + new Date);
   });
+</script>

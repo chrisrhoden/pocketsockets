@@ -1,12 +1,13 @@
-| Mobile
+Mobile
 
-script
+<script>
   var socket = io.connect()
   var id;
-  socket.emit('joinSession', #{sessionId}, function () {
+  socket.emit('joinSession', <%= sessionId %>, function () {
     $('body').append("You're connected to a session");
     $('body').append('<button>Press Me</button');
     $('button').click(function() {
       socket.emit('buttonPressed');
     });
   });
+</script>
