@@ -1,7 +1,8 @@
 Mobile
-
+<div id='time-code'></div>
 <script>
   var socket = io.connect()
+  var timeCodeEl = $('#time-code');
   var id;
   socket.emit('joinSession', <%= sessionId %>, function () {
     $('body').append("You're connected to a session");
@@ -9,5 +10,9 @@ Mobile
     $('button').click(function() {
       socket.emit('buttonPressed');
     });
+  });
+
+  socket.on('timeCode', function (time) {
+    timeCodeEl.html(time);
   });
 </script>

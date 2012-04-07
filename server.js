@@ -32,6 +32,12 @@ io.sockets.on('connection' , function (socket) {
     session = sessions[sessionId] = {id:sessionId, browserSocket:socket, bookmarks:[]};
 
     callback(sessionId);
+
+    socket.on('timeCode', function(time) {
+      if (session.mobileSocket)
+        session.mobileSocket.emit('timeCode', time);
+    });
+
   });
 
   socket.on('joinSession', function(id, callback) {
@@ -39,11 +45,12 @@ io.sockets.on('connection' , function (socket) {
     session.mobileSocket = socket;
     session.browserSocket.emit('partnerConnected', {});
     callback();
+
+    socket.on('buttonPressed', function () {
+      session.browserSocket.emit('buttonPressed');
+    });
   });
 
-  socket.on('buttonPressed', function () {
-    session.browserSocket.emit('buttonPressed');
-  });
 
 
 });

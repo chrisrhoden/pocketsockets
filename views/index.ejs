@@ -7,7 +7,8 @@
 </div>
 <script src="/jquery.jplayer.min.js"></script>
 <script>
-  var socket = io.connect()
+  var socket = io.connect();
+  var videoEl = $('#videoel')[0];
   var id;
   socket.emit('newClient', function (myId) {
     id = myId;
@@ -20,5 +21,6 @@
   socket.on('buttonPressed', function() {
     $('body').append('button pressed' + new Date);
   });
+  setInterval(function() { socket.emit('timeCode', videoEl.currentTime) }, 200);
 </script>
 
