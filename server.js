@@ -56,6 +56,10 @@ io.sockets.on('connection' , function (socket) {
     socket.on('switchVideo', function() {
       session.browserSocket.emit('switchVideo');
     });
+
+    socket.on('scanTo', function(time) {
+      session.browserSocket.emit('scanTo', time);
+    })
   });
 
 

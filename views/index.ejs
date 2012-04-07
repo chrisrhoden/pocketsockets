@@ -100,6 +100,10 @@
     switchVideo();
   });
 
+  socket.on('scanTo', function(time) {
+    videoEl.currentTime = time;
+  });
+
   function setDuration() {
     socket.emit('videoDuration', videoEl.duration);
   }

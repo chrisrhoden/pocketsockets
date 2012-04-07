@@ -62,12 +62,19 @@
 
   function getObjectForTime(time) {
     var obj = timecodes[0];
+    var timer = 0;
     for (key in timecodes) {
       if (time >= key) {
+        timer = key;
         obj = timecodes[key];
       }
     }
+    obj['time'] = timer;
     return obj;
+  }
+
+  function getTimeForTime(time) {
+    return getObjectForTime(time).time;
   }
 
   function getLinkForTime(time) {
@@ -77,6 +84,14 @@
     } else {
       return obj.links[0];
     }
+  }
+
+  function makeLinksForTime(time) {
+    var str = "", obj = getObjectForTime(time);
+    str = str + " <a href='javascript:scanTo(" + obj['time'] + ")'>Go back to " + timeToCode(obj['time']) + "</a>";
+    if (obj.video)
+      str = str + " | <a href='javascript:switchVideo()'>watch additional footage</a>";
+    return str;
   }
   </script>
   </head>
