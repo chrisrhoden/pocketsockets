@@ -2,7 +2,6 @@ html
   head
     title #{title}
     script(src="/socket.io/socket.io.js")
-    script
-      var socket = io.connect()
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
   body
     !{body}

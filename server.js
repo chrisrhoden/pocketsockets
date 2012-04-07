@@ -17,10 +17,27 @@ app.get('/', function(req, res) {
 });
 
 app.get('/mobile', function(req, res) {
-  res.end("SUCCESS!");
+  res.render('mobile.jade', {title:"mobile!", sessionId:req.params['session_id'] || '0' });
 });
 
+
+var sessions = [];
+
 io.sockets.on('connection' , function (socket) {
+
+  socket.on('newClient', function(callback) {
+    var id = sessions.length;
+    sessions.push({id:id, browserSocket:socket, bookmarks:[]});
+    callback(id);
+  });
+
+  socket.on('joinSession', function(id, callback) {
+    var session = sessions[id];
+    session.mobileSocket = socket;
+    session.browserSocket.emit('partnerConnected', {});
+    callback();
+  });
+
 
 });
 

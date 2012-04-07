@@ -1,1 +1,16 @@
-h1 hi
+#qr-container
+  img#qr
+  h2 scan me
+#video-container(style="display:none")
+  | You're connected
+script
+  var socket = io.connect()
+  var id;
+  socket.emit('newClient', function (myId) {
+    id = myId;
+    $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://sockets.chrisrhoden.com/mobile?sessionId=" + id)
+  });
+  socket.on('partnerConnected', function() {
+    $('#qr-container').hide();
+    $('#video-container').show();
+  });
