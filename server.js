@@ -25,17 +25,24 @@ var sessions = [];
 
 io.sockets.on('connection' , function (socket) {
 
+  var session;
+
   socket.on('newClient', function(callback) {
-    var id = sessions.length;
-    sessions.push({id:id, browserSocket:socket, bookmarks:[]});
-    callback(id);
+    var sessionId = sessions.length;
+    sessions.push({id:sessionId, browserSocket:socket, bookmarks:[]});
+    session = sessions[sessionId];
+    callback(sessionId);
   });
 
   socket.on('joinSession', function(id, callback) {
-    var session = sessions[id];
+    session = sessions[id];
     session.mobileSocket = socket;
     session.browserSocket.emit('partnerConnected', {});
     callback();
+  });
+
+  socket.on('buttonPressed', function () {
+    session.browserSocket.emit('buttonPressed');
   });
 
 
