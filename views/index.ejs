@@ -2,7 +2,12 @@
   <img id="qr" />
 </div>
 <div id="video-container" style="display:none">
-  <div id="video"><video id='videoel' src="/3011hack.mp4" /></div>
+  <div id="video">
+    <video id='videoel' src="/3011hack.mp4" controls />
+  </div>
+  <div id="video2" style="display:none">
+    <video id='videoel2' src="/ang_segment.mp4" controls/>
+  </div>
 </div>
 <ul id="bookmarks"></ul>
 <ul id="notifications"></ul>
@@ -11,6 +16,9 @@
     background: #333;
     color: #ddd;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7);
+  }
+  #bookmarks {
+    display: none;
   }
   #qr-container {
     width: 150px;
@@ -29,7 +37,7 @@
     top: 0;
     left: 0;
   }
-  #video {
+  #video, #video2 {
     width: 640px;
     margin: 0 auto;
   }
@@ -51,6 +59,13 @@
   }
 </style>
 <script>
+  function switchVideo() {
+    $('#video').hide();
+    $('#video2').show();
+    videoEl = $('#videoel2')[0];
+    setDuration();
+    videoEl.play();
+  }
   var socket = io.connect();
   var videoEl = $('#videoel')[0];
   var bookmarks = $('#bookmarks');
@@ -71,7 +86,7 @@
     });
     setInterval(function() { if (currentTime != videoEl.currentTime) {
       socket.emit('timeCode', currentTime = videoEl.currentTime) } }, 200);
-    socket.emit('videoDuration', videoEl.duration);
+    setDuration();
   });
   socket.on('addBookmark', function(time) {
     bookmarks.append("<li>" + timeToCode(time) + '</li>');
@@ -81,6 +96,13 @@
       $(this).slideUp();
     })}, 2000);
   });
+  socket.on('switchVideo', function() {
+    switchVideo();
+  });
+
+  function setDuration() {
+    socket.emit('videoDuration', videoEl.duration);
+  }
 </script>
 
 

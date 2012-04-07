@@ -31,8 +31,8 @@
   socket.emit('joinSession', <%= sessionId %>, function () {
     $('#button').click(function() {
       socket.emit('addBookmark', currentTime);
-      $('#bookmarks').append("<tr><td>" + timeToCode(currentTime) +  "</td><td>" +
-        getTextForTime(currentTime) +"</td></tr>");
+      $('#bookmarks').append("<tr><td>" + timeToCode(currentTime) +  "</td><td><a href='"+getLinkForTime(currentTime)+"'>" +
+        getTextForTime(currentTime) +"</a></td></tr>");
     });
   });
 
@@ -48,4 +48,8 @@
     duration = time;
     $('#duration').html(timeToCode(time));
   });
+
+  function switchVideo() {
+    socket.emit('switchVideo');
+  }
 </script>

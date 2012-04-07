@@ -52,6 +52,10 @@ io.sockets.on('connection' , function (socket) {
     socket.on('addBookmark', function (time) {
       session.browserSocket.emit('addBookmark', time);
     });
+
+    socket.on('switchVideo', function() {
+      session.browserSocket.emit('switchVideo');
+    });
   });
 
 

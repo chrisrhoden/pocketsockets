@@ -49,21 +49,34 @@
   }
 
   var timecodes = {
-    0: "Inside the epic story of the global crisis",
-    34: "An environment of greed and envy",
-    51: "Obama gets a real glimpse of the future",
-    68: "These banks transfer risk across the Atlantic",
-    83: "Is the global financial system any safer?"
+    0:  {text:"Inside the epic story of the global crisis", links:['']},
+    34: {text:"An environment of greed and envy", links: ['']},
+    51: {text:"Obama gets a real glimpse of the future", links: ['']},
+    68: {text:"These banks transfer risk across the Atlantic", links: ['']},
+    83: {text:"Is the global financial system any safer?",  video:true}
   }
 
   function getTextForTime(time) {
-    var text = timecodes[0];
+    return getObjectForTime(time).text;
+  }
+
+  function getObjectForTime(time) {
+    var obj = timecodes[0];
     for (key in timecodes) {
       if (time >= key) {
-        text = timecodes[key];
+        obj = timecodes[key];
       }
     }
-    return text;
+    return obj;
+  }
+
+  function getLinkForTime(time) {
+    var obj = getObjectForTime(time);
+    if (obj.video) {
+      return "javascript:switchVideo()";
+    } else {
+      return obj.links[0];
+    }
   }
   </script>
   </head>
