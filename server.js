@@ -17,7 +17,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/mobile', function(req, res) {
-  res.render('mobile.ejs', {title:"mobile!", sessionId:req.params['session_id'] || '0' });
+  res.render('mobile.ejs', {title:"mobile!", sessionId:req.query.session_id || '0' });
 });
 
 
@@ -29,8 +29,8 @@ io.sockets.on('connection' , function (socket) {
 
   socket.on('newClient', function(callback) {
     var sessionId = sessions.length;
-    sessions.push({id:sessionId, browserSocket:socket, bookmarks:[]});
-    session = sessions[sessionId];
+    session = sessions[sessionId] = {id:sessionId, browserSocket:socket, bookmarks:[]};
+
     callback(sessionId);
   });
 
