@@ -1,9 +1,11 @@
 <div id="qr-container">
   <img id="qr" />
   <h2>scan me</h2>
-<div id="video-container" style="display:none">
-  You're connected
 </div>
+<div id="video-container" style="display:none">
+  <div id="video"><video id='videoel' src="/3011hack.mp4" controls /></div>
+</div>
+<script src="/jquery.jplayer.min.js"></script>
 <script>
   var socket = io.connect()
   var id;
@@ -19,3 +21,4 @@
     $('body').append('button pressed' + new Date);
   });
 </script>
+
