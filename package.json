@@ -1,0 +1,26 @@
+{
+   "name": "pocketsocket",
+   "version": "0.0.1",
+   "description": "whooooop",
+   "keywords": [
+       "pclet",
+       "skd"
+   ],
+   "maintainers": [
+       {
+           "name": "Chris Rhoden",
+           "email": "carhoden@gmail.com",
+           "web": "http://chrisrhoden.com"
+       }
+   ],
+   "repositories": [
+       {
+           "type": "git",
+           "url": "http://github.com/chrisrhoden/pocketsockets.git"
+       }
+   ],
+   "dependencies": {
+       "socket.io": "~> 0.9.0 ",
+       "express": "~> 2.5.0"
+   }
+}
