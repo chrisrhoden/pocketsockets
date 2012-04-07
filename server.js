@@ -34,8 +34,7 @@ io.sockets.on('connection' , function (socket) {
     callback(sessionId);
 
     socket.on('timeCode', function(time) {
-      if (session.mobileSocket)
-        session.mobileSocket.emit('timeCode', time);
+      session.mobileSocket.emit('timeCode', time);
     });
 
   });

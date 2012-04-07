@@ -1,15 +1,54 @@
-Mobile
-<div id='time-code'></div>
-<ul id='bookmarks'></ul>
+<div class="container">
+
+    <div id="live-bookmarker">
+      <span>You are watching:</span>
+      <h3>Money, Power, &amp; Wall Street</h3>
+      <div class="progress progress-success" id='button'>
+        <div class="bar btn-success" style="width: 33%;"> </div>
+        <div class="timestamp">
+        <span id='time-code'>01:05 / 30:35</span><br />
+        <span style="font-size:18px;">click to bookmark this moment</span>
+        </div>
+      </div>
+      <table>
+        <tr class="headers">
+          <th>Moment</th>
+          <th>Info</th>
+        </tr>
+        <tbody>
+          <tr>
+            <td>01:00</td>
+            <td>Lorem ispum dolor sit amet adipiscing.</td>
+          </tr>
+          <tr>
+            <td>00:45</td>
+            <td>Lorem ispum dolor sit amet adipiscing.</td>
+          </tr>
+          <tr>
+            <td>00:30</td>
+            <td>Lorem ispum dolor sit amet adipiscing.</td>
+          </tr>
+          <tr>
+            <td>00:15</td>
+            <td>Lorem ispum dolor sit amet adipiscing.</td>
+          </tr>
+          <tr>
+            <td>00:00</td>
+            <td>Lorem ispum dolor sit amet adipiscing.</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div><!-- #live-bookmarker -->
+
+    </div>
 <script>
   var socket = io.connect()
   var timeCodeEl = $('#time-code');
   var currentTime = 0;
   var id;
   socket.emit('joinSession', <%= sessionId %>, function () {
-    $('body').append("You're connected to a session");
-    $('body').append('<button>Press Me</button');
-    $('button').click(function() {
+    $('#button').click(function() {
       socket.emit('addBookmark', currentTime);
       $('#bookmarks').append("<li>"+currentTime+"</li>");
     });

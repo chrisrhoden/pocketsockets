@@ -11,6 +11,7 @@
   var socket = io.connect();
   var videoEl = $('#videoel')[0];
   var bookmarks = $('#bookmarks');
+  var currentTime = 0.0;
   var id;
   socket.emit('newClient', function (myId) {
     id = myId;
@@ -19,10 +20,11 @@
   socket.on('partnerConnected', function() {
     $('#qr-container').hide();
     $('#video-container').show();
+    setInterval(function() { if (currentTime > videoEl.currentTime || currentTime < videoEl.currentTime) {
+      socket.emit('timeCode', currentTime = videoEl.currentTime) } }, 50);
   });
   socket.on('addBookmark', function(time) {
     bookmarks.append('<li>' + time + '</li>');
   });
-  setInterval(function() { socket.emit('timeCode', videoEl.currentTime) }, 200);
 </script>
 
