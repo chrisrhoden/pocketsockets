@@ -4,9 +4,9 @@
       <span>You are watching:</span>
       <h3>Money, Power, &amp; Wall Street</h3>
       <div class="progress progress-success" id='button'>
-        <div class="bar btn-success" style="width: 33%;"> </div>
+        <div class="bar btn-success" style="width: 0%;"> </div>
         <div class="timestamp">
-        <span id='time-code'>0:00:00.0</span> / <span id='duration'>0:00:00.0</span><br />
+        <span id='time-code'>0:00:00</span> / <span id='duration'>0:00:00</span><br />
         <span style="font-size:18px;">click to bookmark this moment</span>
         </div>
       </div>
@@ -15,27 +15,7 @@
           <th>Moment</th>
           <th>Info</th>
         </tr>
-        <tbody>
-          <tr>
-            <td>01:00</td>
-            <td>Lorem ispum dolor sit amet adipiscing.</td>
-          </tr>
-          <tr>
-            <td>00:45</td>
-            <td>Lorem ispum dolor sit amet adipiscing.</td>
-          </tr>
-          <tr>
-            <td>00:30</td>
-            <td>Lorem ispum dolor sit amet adipiscing.</td>
-          </tr>
-          <tr>
-            <td>00:15</td>
-            <td>Lorem ispum dolor sit amet adipiscing.</td>
-          </tr>
-          <tr>
-            <td>00:00</td>
-            <td>Lorem ispum dolor sit amet adipiscing.</td>
-          </tr>
+        <tbody id='bookmarks'>
         </tbody>
       </table>
 
@@ -51,14 +31,15 @@
   socket.emit('joinSession', <%= sessionId %>, function () {
     $('#button').click(function() {
       socket.emit('addBookmark', currentTime);
-      $('#bookmarks').append("<li>"+currentTime+"</li>");
+      $('#bookmarks').append("<tr><td>" + timeToCode(currentTime) +  "</td><td>" +
+        getTextForTime(currentTime) +"</td></tr>");
     });
   });
 
   socket.on('timeCode', function (time) {
     currentTime = time;
 
-    var percent = Math.ceil((time/duration) * 100);
+    var percent = (time/duration) * 100;
     $('.bar').css('width', percent + "%");
     timeCodeEl.html(timeToCode(time));
   });
@@ -67,19 +48,4 @@
     duration = time;
     $('#duration').html(timeToCode(time));
   });
-
-
-  function timeToCode(secs)
-{
-    var hours = Math.floor(secs / (60 * 60));
-
-    var divisor_for_minutes = secs % (60 * 60);
-    var minutes = Math.floor(divisor_for_minutes / 60);
-
-    var divisor_for_seconds = divisor_for_minutes % 60;
-    var seconds = Math.ceil(divisor_for_seconds);
-
-    var msecs = Math.ceil((secs % 1) * 100);
-    return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds + '.' + (msecs < 10 ? '0' : '') + msecs;
-}
 </script>

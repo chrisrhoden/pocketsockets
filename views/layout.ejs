@@ -30,10 +30,42 @@
       #live-bookmarker table { width: 100%; margin-top: 20px; }
       #live-bookmarker table th, #live-bookmarker table td { text-align: left; padding: 2px 5px; }
       #live-bookmarker div.progress { cursor:pointer;position:relative;height:80px;background-image:none;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ada), to(#6a6));-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(0,0,0,0.3);}
-      #live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
+      #live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); ck  -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
       #live-bookmarker div.progress div.timestamp { position:absolute;top:20px;width:100%;text-align:center; }
-      #live-bookmarker div.progress div.timestamp span { font-size:30px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
+      #live-bookmarker div.progress div.timestamp span { font-size:18px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
     </style>
+
+    <script>
+    function timeToCode(secs) {
+      var hours = Math.floor(secs / (60 * 60));
+
+      var divisor_for_minutes = secs % (60 * 60);
+      var minutes = Math.floor(divisor_for_minutes / 60);
+
+      var divisor_for_seconds = divisor_for_minutes % 60;
+      var seconds = Math.ceil(divisor_for_seconds);
+
+      return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
+
+  var timecodes = {
+    0: "Inside the epic story of the global crisis",
+    34: "An environment of greed and envy",
+    51: "Obama gets a real glimpse of the future",
+    68: "These banks transfer risk across the Atlantic",
+    83: "Is the global financial system any safer?"
+  }
+
+  function getTextForTime(time) {
+    var text = timecodes[0];
+    for (key in timecodes) {
+      if (time >= key) {
+        text = timecodes[key];
+      }
+    }
+    return text;
+  }
+  </script>
   </head>
   <body>
     <%- body %>
