@@ -124,7 +124,9 @@
     </div><!-- #live-bookmarker -->
 
     </div>
+<script src="/base.js"></script>
 <script>
+  var x = FRONTLINE;
   var socket = io.connect()
   var timeCodeEl = $('#time-code');
   var currentTime = 0;
@@ -135,7 +137,7 @@
     return hash.replace('#', '');
   }
 
-  socket.emit('joinSession', getSessionId(window.location.hash), function () {
+  socket.emit(x.JOIN, getSessionId(window.location.hash), function () {
     $('#button').click(function() {
       socket.emit('addBookmark', currentTime);
       $('#bookmarks').append("<tr><td>" + timeToCode(currentTime) + "</td><td>" +
@@ -146,43 +148,39 @@
   });
 
   $('#skipBack').click(function() {
-    socket.emit('scanTo',0);
+    socket.emit(x.SCAN, 0);
   });
 
   $('#skipForward').click(function() {
-    socket.emit('scanTo',duration);
+    socket.emit(x.SCAN, duration);
   });
 
   $('#playPause').click(function() {
     var $this = $(this);
-    if ($this.hasClass('pause')) {
-      $this.removeClass("pause").addClass('play');
-      socket.emit('pause');
-    } else if ($this.hasClass('play')) {
-      $this.removeClass('play').addClass('pause');
-      socket.emit('play');
+    if ($this.hasClass(x.PAUSE)) {
+      $this.removeClass(x.PAUSE).addClass(x.PLAY);
+      socket.emit(x.PAUSE);
+    } else if ($this.hasClass(x.PLAY)) {
+      $this.removeClass(x.PLAY).addClass(x.PAUSE);
+      socket.emit(x.PLAY);
     }
   });
 
-  socket.on('timeCode', function (time) {
+  socket.on(x.TIMECODE, function (time) {
     currentTime = time;
 
     var percent = (time/duration) * 100;
     $('.bar').css('width', percent + "%");
-    timeCodeEl.html(timeToCode(time));
+    timeCodeEl.html(x.TIME_TO_CODE(time));
   });
 
-  socket.on('videoDuration', function(time) {
+  socket.on(x.DURATION, function(time) {
     duration = time;
-    $('#duration').html(timeToCode(time));
+    $('#duration').html(x.TIME_TO_CODE(time));
   });
-
-  function switchVideo() {
-    socket.emit('switchVideo');
-  }
 
   function scanTo(time) {
-    socket.emit('scanTo', time);
+    socket.emit(x.SCAN, time);
   }
 </script>
 </body>
