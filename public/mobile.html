@@ -146,12 +146,11 @@
   });
 
   $('#skipBack').click(function() {
-    alert('foo');
     socket.emit('scanTo',0);
   });
 
   $('#skipForward').click(function() {
-    socket.emit('skipTo',duration);
+    socket.emit('scanTo',duration);
   });
 
   $('#playPause').click(function() {
