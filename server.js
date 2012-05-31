@@ -45,7 +45,6 @@ io.sockets.on('connection' , function (socket) {
   });
 
   socket.on('joinSession', function(id, callback) {
-    console.log(id);
     session = sessions[id];
     session.mobileSocket = socket;
     session.browserSocket.emit('partnerConnected', {});
@@ -77,6 +76,5 @@ function makeSessionId(sessions, length) {
   }
 }
 
-var port = process.env['PORT'] || 9004;
-console.log("listening on port " + port);
+var port = (process.env['PORT'] || 9004);
 app.listen(port);
