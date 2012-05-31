@@ -45,6 +45,7 @@ window.FRONTLINE = {
           obj = FRONTLINE.TIMECODES[key];
         }
       }
+      obj = (obj || {});
       obj['time'] = timer;
       return obj;
   }
