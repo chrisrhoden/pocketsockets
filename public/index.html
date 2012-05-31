@@ -49,10 +49,6 @@
     top: 0;
     left: 0;
   }
-  #video, #video2 {
-    width: 640px;
-    margin: 0 auto;
-  }
 
   #notifications {
     list-style-type: none;
@@ -152,7 +148,7 @@
     id = myId;
     $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
   });
-  videoEl.width = $(window).width();
+
   socket.on('partnerConnected', function() {
     $('#qr-container').animate({'top': -400}, function() {
       $(this).hide();
@@ -176,14 +172,17 @@
   });
 
   socket.on('scanTo', function(time) {
+    console.log("got scanTo " + time)
     videoEl.currentTime = time;
   });
 
   socket.on('play', function() {
+    console.log('got play');
     videoEl.play();
   });
 
   socket.on('pause', function() {
+    console.log('got pause');
     videoEl.pause();
   });
 
