@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap-responsive.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <style type="text/css">
+       body, body .container { margin: 5% 2%; padding: 0; }
+      #live-bookmarker { width: 100%; }
+      #live-bookmarker a.btn { display: block; }
+      #live-bookmarker table { width: 100%; margin-top: 20px; }
+      #live-bookmarker table th, #live-bookmarker table td { text-align: left; padding: 2px 5px; }
+      #live-bookmarker div.progress { cursor:pointer;position:relative;height:80px;background-image:none;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ada), to(#6a6));-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(0,0,0,0.3);}
+      #live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); ck  -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
+      #live-bookmarker div.progress div.timestamp { position:absolute;top:20px;width:100%;text-align:center; }
+      #live-bookmarker div.progress div.timestamp span { font-size:18px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
+        body {
+    background: #333;
+    color: #ddd;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7);
+  }
+  #bookmarks {
+    display: none;
+  }
+  #qr-container {
+    width: 150px;
+    margin: 0 auto;
+    text-align: center;
+    background: #fff;
+    border-radius: 200px;
+    height: 150px;
+    padding: 50px;
+    box-shadow: 0 0 2px #000;
+  }
+  #video-container {
+    postition: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  #video, #video2 {
+    width: 640px;
+    margin: 0 auto;
+  }
+
+  #notifications {
+    list-style-type: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  #notifications li {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 25px;
+    padding: 5px 25px;
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+    margin: 10px;
+  }
+  </style>
+
+  <script>
+    function timeToCode(secs) {
+      var hours = Math.floor(secs / (60 * 60));
+
+      var divisor_for_minutes = secs % (60 * 60);
+      var minutes = Math.floor(divisor_for_minutes / 60);
+
+      var divisor_for_seconds = divisor_for_minutes % 60;
+      var seconds = Math.ceil(divisor_for_seconds);
+
+      return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  }
+
+    var timecodes = {
+                 30: {text:"Timeline: Inside the Meltdown", links: ['http://www.pbs.org/wgbh/pages/frontline/meltdown/cron/']},
+                 70: {text:"The Appetite for Subprime Mortgages", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/subprime-mortgages/']},
+                 144: {text:"More from Wall Street's Super-Lawyer", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/rodgin-cohen/']},
+                 191: {text:"Who Is Timothy Geithner?", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/tim-geithner/']},
+                 257: {text:"What Are Credit Default Swaps?", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/credit-default-swaps/']},
+                 310: {text:"\"Too Big to Fail\"", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/too-big-to-fail/']},
+                 358: {text:"Read the Report", links: ['http://fcic.law.stanford.edu/']},
+                 392: {text:"The Tide of Deregulation", links: ['http://www.pbs.org/wgbh/pages/frontline/warning/cron/']},
+                 411: {text:"How She Tried to Push for Regulation", links: ['http://www.pbs.org/wgbh/pages/frontline/warning/']},
+                 470: {text:"\"The Bernanke Conundrum\"", links: ['http://www.nytimes.com/2012/04/29/magazine/chairman-bernanke-should-listen-to-professor-bernanke.html?_r=1&hp&pagewanted=print']},
+                 587: {text:"Inside the Decision to Rescue Bear Stearns", links: ['http://www.pbs.org/wgbh/pages/frontline/meltdown/themes/bear.html']},
+                 742: {text:"The Greenspan Era", links: ['http://www.pbs.org/wgbh/pages/frontline/warning/themes/greenspan.html']}
+   }
+
+    function getTextForTime(time) {
+      return getObjectForTime(time).text;
+    }
+
+    function getObjectForTime(time) {
+      var obj = timecodes[0];
+      var timer = 0;
+      for (key in timecodes) {
+        if (time >= key) {
+          timer = key;
+          obj = timecodes[key];
+        }
+      }
+      obj['time'] = timer;
+      return obj;
+    }
+
+    function getTimeForTime(time) {
+      return getObjectForTime(time).time;
+    }
+
+    function getLinkForTime(time) {
+      var obj = getObjectForTime(time);
+      return obj.links[0];
+    }
+
+    function makeLinksForTime(time) {
+      var str = "", obj = getObjectForTime(time);
+      str = str + " <a href='javascript:scanTo(" + obj['time'] + ")'>Go back to " + timeToCode(obj['time']) + "</a>";
+      return str;
+    }
+  var socket = io.connect();
+  var videoEl = $('#videoel')[0];
+  var bookmarks = $('#bookmarks');
+  var notifications = $('#notifications');
+  var currentTime = 0.0;
+  var id;
+  socket.emit('newClient', function (myId) {
+    console.log(myId);
+    id = myId;
+    $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://sockets.chrisrhoden.com/mobile.html%23" + id)
+  });
+  socket.on('partnerConnected', function() {
+    $('#qr-container').animate({'top': -400}, function() {
+      $(this).hide();
+      $('body').css({background:"#000"})
+      $('#video-container').fadeIn(function () {
+        videoEl.play();
+      });
+    });
+    setInterval(function() { if (currentTime != videoEl.currentTime) {
+      socket.emit('timeCode', currentTime = videoEl.currentTime) } }, 200);
+    setDuration();
+  });
+  socket.on('addBookmark', function(time) {
+    bookmarks.append("<li>" + timeToCode(time) + '</li>');
+    var notification = $(document.createElement('li')).append("Added bookmark: " + timeToCode(time) + "<br />\"" + getTextForTime(time) + "\"");
+    notifications.append(notification);
+    setTimeout(function() { notification.animate({'opacity':0}, function () {
+      $(this).slideUp();
+    })}, 2000);
+  });
+  socket.on('switchVideo', function() {
+    switchVideo();
+  });
+
+  socket.on('scanTo', function(time) {
+    videoEl.currentTime = time;
+  });
+
+  function setDuration() {
+    socket.emit('videoDuration', videoEl.duration);
+  }
+
+    </script>
+  </head>
+  <body>
+    <div id="qr-container" style="position:relative;">
+      <img id="qr" />
+    </div>
+    <div id="video-container" style="display:none">
+      <div id="video">
+        <video id='videoel' src="/ch5.mp4" controls />
+      </div>
+    </div>
+    <ul id="bookmarks"></ul>
+    <ul id="notifications"></ul>
+  </body>
+</html>

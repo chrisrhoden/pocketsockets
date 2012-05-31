@@ -3,6 +3,7 @@ var express = require('express')
 
 var app = express.createServer();
 var io  = sockets.listen(app);
+var md5 = require('MD5');
 
 app.configure(function() {
   app.use(express.logger());
@@ -12,33 +13,25 @@ app.configure(function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 })
 
-app.get('/', function(req, res) {
-  res.render('index.ejs', {title:"Hi"});
-});
-
-app.get('/mobile', function(req, res) {
-  res.render('mobile.ejs', {title:"mobile!", sessionId:req.query.session_id || '0' });
-});
-
-
-var sessions = [];
+var sessions = {};
 
 io.sockets.on('connection' , function (socket) {
 
   var session;
 
   socket.on('newClient', function(callback) {
-    var sessionId = sessions.length;
+    var sessionId = md5('a salt' + sessions.length + new Date());
     session = sessions[sessionId] = {id:sessionId, browserSocket:socket, bookmarks:[]};
 
     callback(sessionId);
 
-    socket.on('timeCode', function(time) {
-      session.mobileSocket.emit('timeCode', time);
-    });
+    var mobileReceives = ['timeCode', 'videoDuration'];
 
-    socket.on('videoDuration', function(time) {
-      session.mobileSocket.emit('videoDuration', time);
+    mobileReceives.forEach(function(el) {
+      socket.on(el, function() {
+        arguments.unshift(el);
+        session.mobileSocket.emit.apply(session.mobileSocket, arguments);
+      });
     });
 
   });
@@ -49,17 +42,15 @@ io.sockets.on('connection' , function (socket) {
     session.browserSocket.emit('partnerConnected', {});
     callback();
 
-    socket.on('addBookmark', function (time) {
-      session.browserSocket.emit('addBookmark', time);
-    });
+    var browserReceives = ['addBookmark', 'switchVideo', 'scanTo', 'play',
+      'pause', 'skipBack', 'skipForward'];
 
-    socket.on('switchVideo', function() {
-      session.browserSocket.emit('switchVideo');
+    browserReceives.forEach(function(el) {
+      socket.on(el, function() {
+        arguments.unshift(el);
+        session.browserSocket.emit.apply(session.browserSocket, arguments);
+      });
     });
-
-    socket.on('scanTo', function(time) {
-      session.browserSocket.emit('scanTo', time);
-    })
   });
 
 
