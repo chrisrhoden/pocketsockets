@@ -70,7 +70,18 @@
     margin: 10px;
   }
   </style>
-
+</head>
+  <body>
+    <div id="qr-container" style="position:relative;">
+      <img id="qr" />
+    </div>
+    <div id="video-container" style="display:none">
+      <div id="video">
+        <video id='videoel' src="/ch5.mp4" style="width:100%" />
+      </div>
+    </div>
+    <ul id="bookmarks"></ul>
+    <ul id="notifications"></ul>
   <script>
     function timeToCode(secs) {
       var hours = Math.floor(secs / (60 * 60));
@@ -153,6 +164,7 @@
       socket.emit('timeCode', currentTime = videoEl.currentTime) } }, 200);
     setDuration();
   });
+
   socket.on('addBookmark', function(time) {
     bookmarks.append("<li>" + timeToCode(time) + '</li>');
     var notification = $(document.createElement('li')).append("Added bookmark: " + timeToCode(time) + "<br />\"" + getTextForTime(time) + "\"");
@@ -160,9 +172,6 @@
     setTimeout(function() { notification.animate({'opacity':0}, function () {
       $(this).slideUp();
     })}, 2000);
-  });
-  socket.on('switchVideo', function() {
-    switchVideo();
   });
 
   socket.on('scanTo', function(time) {
@@ -182,17 +191,5 @@
   }
 
     </script>
-  </head>
-  <body>
-    <div id="qr-container" style="position:relative;">
-      <img id="qr" />
-    </div>
-    <div id="video-container" style="display:none">
-      <div id="video">
-        <video id='videoel' src="/ch5.mp4" style="width:100%" />
-      </div>
-    </div>
-    <ul id="bookmarks"></ul>
-    <ul id="notifications"></ul>
   </body>
 </html>
