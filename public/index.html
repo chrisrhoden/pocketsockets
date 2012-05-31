@@ -106,8 +106,8 @@
   });
 
   socket.on(x.BOOKMARK, function(time) {
-    bookmarks.append("<li>" + timeToCode(time) + '</li>');
-    var notification = $(document.createElement('li')).append("Added bookmark: " + x.TIME_TO_CODE(time) + "<br />\"" + getTextForTime(time) + "\"");
+    bookmarks.append("<li>" + x.TIME_TO_CODE(time) + '</li>');
+    var notification = $(document.createElement('li')).append("Added bookmark: " + x.TIME_TO_CODE(time) + "<br />\"" + x.GET_TEXT_FOR_TIME(time) + "\"");
     notifications.append(notification);
     setTimeout(function() { notification.animate({'opacity':0}, function () {
       $(this).slideUp();
