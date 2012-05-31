@@ -157,7 +157,7 @@
     if (paused) {
       paused = true;
       socket.emit('pause');
-    } else {}
+    } else {
       paused = false;
       socket.emit('play');
     }
