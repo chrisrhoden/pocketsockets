@@ -54,11 +54,15 @@ body {
 }
 
 video {
-  cursor: url('blank.cur'),url('blank.gif'),url('blank.png'),url('blank.xbm'),none;
+  cursor: url('/images/blank.cur'),
+    url('/images/blank.gif'),
+    url('/images/blank.png'),
+    url('/images/blank.xbm'),none;
 }
 
 #lower-third {
-  background: rgb(86,16,20);
+
+  background: rgba(200, 0, 0, 0.7);
   color: #fff;
   font-family: "Helvetica Neue";
   position: absolute;
