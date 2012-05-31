@@ -5,6 +5,11 @@ var app = express.createServer();
 var io  = sockets.listen(app);
 var md5 = require('MD5');
 
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
+});
+
 app.configure(function() {
   app.use(express.logger());
   app.use(express.bodyParser());
