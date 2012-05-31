@@ -147,7 +147,7 @@
 
   $('#skipBack').click(function() {
     alert('foo');
-    socket.emit('seekTo',0);
+    socket.emit('scanTo',0);
   });
 
   $('#skipForward').click(function() {
@@ -160,7 +160,7 @@
       socket.emit('pause');
     } else {
       paused = false;
-      socket.emit('play');
+      socket.emit('scanTo');
     }
   });
 
