@@ -36,8 +36,9 @@ io.sockets.on('connection' , function (socket) {
 
     mobileReceives.forEach(function(el) {
       socket.on(el, function() {
-        arguments.unshift(el);
-        session.mobileSocket.emit.apply(session.mobileSocket, arguments);
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(el);
+        session.mobileSocket.emit.apply(session.mobileSocket, args);
       });
     });
 
@@ -55,8 +56,9 @@ io.sockets.on('connection' , function (socket) {
 
     browserReceives.forEach(function(el) {
       socket.on(el, function() {
-        arguments.unshift(el);
-        session.browserSocket.emit.apply(session.browserSocket, arguments);
+        var args = Array.prototype.slice.call(arguments);
+        args.unshift(el);
+        session.browserSocket.emit.apply(session.browserSocket, args);
       });
     });
   });
