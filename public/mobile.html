@@ -156,11 +156,11 @@
 
   $('#playPause').click(function() {
     if (paused) {
-      paused = true;
-      socket.emit('pause');
+      paused = false;
+      socket.emit('play');
     } else {
       paused = false;
-      socket.emit('scanTo');
+      socket.emit('pause');
     }
   });
 
