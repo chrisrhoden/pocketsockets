@@ -169,6 +169,14 @@
     videoEl.currentTime = time;
   });
 
+  socket.on('play', function() {
+    videoEl.play();
+  });
+
+  socket.on('pause', function() {
+    videoEl.pause();
+  });
+
   function setDuration() {
     socket.emit('videoDuration', videoEl.duration);
   }
@@ -181,7 +189,7 @@
     </div>
     <div id="video-container" style="display:none">
       <div id="video">
-        <video id='videoel' src="/ch5.mp4" controls />
+        <video id='videoel' src="/ch5.mp4" style="width:100%" />
       </div>
     </div>
     <ul id="bookmarks"></ul>

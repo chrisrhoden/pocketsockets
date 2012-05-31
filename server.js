@@ -1,5 +1,6 @@
 var express = require('express')
-  , sockets = require('socket.io');
+  , sockets = require('socket.io')
+  , Base64  = require('./lib/base64');
 
 var app = express.createServer();
 var io  = sockets.listen(app);
@@ -25,7 +26,8 @@ io.sockets.on('connection' , function (socket) {
   var session;
 
   socket.on('newClient', function(callback) {
-    var sessionId = md5('a salt' + sessions.length + new Date());
+    var sessionId = makeSessionId(sessions);
+
     session = sessions[sessionId] = {id:sessionId, browserSocket:socket, bookmarks:[]};
 
     callback(sessionId);
@@ -62,4 +64,19 @@ io.sockets.on('connection' , function (socket) {
 
 });
 
-app.listen(process.env['PORT'] || 9004);
+function makeSessionId(sessions, length) {
+  length = (length || 5);
+
+  var sessionId = parseInt(md5('a salt' + sessions.length + new Date()).replace(/[^0-9]/g,''));
+  sessionId = Base64.encode(500 + sessionId);
+  sessionId = sessionId.substring(0,length);
+  if (sessions[sessionId]) {
+    return makeSessionId(sessions, length + 1);
+  } else {
+    return sessionId;
+  }
+}
+
+var port = process.env['PORT'] || 9004;
+console.log("listening on port " + port);
+app.listen(port);
