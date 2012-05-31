@@ -8,6 +8,7 @@ window.FRONTLINE = {
   , CONNECT   : "newClient"
   , TIMECODE  : "timeCode"
   , JOIN      : "joinSession"
+  , FREQUENCY : 500 // How often we send progress to mobile devices, in ms.
   , TIMECODES : {
       30:  {text:"Timeline: Inside the Meltdown", links: ['http://www.pbs.org/wgbh/pages/frontline/meltdown/cron/']},
       70:  {text:"The Appetite for Subprime Mortgages", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/subprime-mortgages/']},
@@ -31,7 +32,8 @@ window.FRONTLINE = {
       var divisor_for_seconds = divisor_for_minutes % 60;
       var seconds = Math.ceil(divisor_for_seconds);
 
-      return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+      return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' +
+        (seconds < 10 ? '0' : '') + seconds;
   }
   , GET_TEXT_FOR_TIME : function (time) {
       return FRONTLINE.GET_OBJECT_FOR_TIME(time).text;
@@ -57,7 +59,8 @@ window.FRONTLINE = {
   }
   , MAKE_LINKS_FOR_TIME : function (time) {
       var str = "", obj = FRONTLINE.GET_OBJECT_FOR_TIME(time);
-      str = str + " <a href='javascript:scanTo(" + obj['time'] + ")'>Go back to " + FRONTLINE.TIME_TO_CODE(obj['time']) + "</a>";
+      str = str + " <a href='javascript:scanTo(" + obj['time'] +
+        ")'>Go back to " + FRONTLINE.TIME_TO_CODE(obj['time']) + "</a>";
       return str;
   }
 }
