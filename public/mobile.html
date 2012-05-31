@@ -146,7 +146,8 @@
   });
 
   $('#skipBack').click(function() {
-    socket.emit('skipTo',0);
+    alert('foo');
+    socket.emit('seekTo',0);
   });
 
   $('#skipForward').click(function() {
