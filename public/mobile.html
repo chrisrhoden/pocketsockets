@@ -155,12 +155,13 @@
   });
 
   $('#playPause').click(function() {
-    if (paused) {
-      paused = false;
-      socket.emit('play');
-    } else {
-      paused = true;
+    var $this = $(this);
+    if ($this.hasClass('pause')) {
+      $this.removeClass("pause").addClass('play');
       socket.emit('pause');
+    } else if ($this.hasClass('play')) {
+      $this.removeClass('play').addClass('pause');
+      socket.emit('play');
     }
   });
 
