@@ -128,7 +128,7 @@
   var duration = 0;
   var id;
   function getSessionId(hash) {
-    var sessId = hash.replace('#', '');
+    return hash.replace('#', '');
   }
 
   socket.emit('joinSession', getSessionId(window.location.hash), function () {
