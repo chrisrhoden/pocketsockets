@@ -2,80 +2,8 @@
 <html>
   <head>
     <title>Demo</title>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="/bootstrap.css" rel="stylesheet">
-    <link href="/bootstrap-responsive.css" rel="stylesheet">
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-    <style type="text/css">
-       body, body .container { margin: 5% 2%; padding: 0; }
-      #live-bookmarker { width: 100%; }
-      #live-bookmarker a.btn { display: block; }
-      #live-bookmarker table { width: 100%; margin-top: 20px; }
-      #live-bookmarker table th, #live-bookmarker table td { text-align: left; padding: 2px 5px; }
-      #live-bookmarker div.progress { cursor:pointer;position:relative;height:80px;background-image:none;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ada), to(#6a6));-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(0,0,0,0.3);}
-      #live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); ck  -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
-      #live-bookmarker div.progress div.timestamp { position:absolute;top:20px;width:100%;text-align:center; }
-      #live-bookmarker div.progress div.timestamp span { font-size:18px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
-        body {
-    background: #333;
-    color: #ddd;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7);
-  }
-  #bookmarks {
-    display: none;
-  }
-  #qr-container {
-    width: 150px;
-    margin: 0 auto;
-    text-align: center;
-    background: #fff;
-    border-radius: 200px;
-    height: 150px;
-    padding: 50px;
-    box-shadow: 0 0 2px #000;
-  }
-  #video-container {
-    postition: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-  }
-
-  #notifications {
-    list-style-type: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  #notifications li {
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 25px;
-    padding: 5px 25px;
-    color: #000;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.9);
-    margin: 10px;
-  }
-  #shade {
-    background: #000;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-  </style>
-</head>
+    <link href="/desktop.css" rel='stylesheet' type='text/css' />
+  </head>
   <body>
     <div id="shade"></div>
     <div id="qr-container" style="position:relative;">
@@ -88,61 +16,9 @@
     </div>
     <ul id="bookmarks"></ul>
     <ul id="notifications"></ul>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/base.js"></script>
-    <script>
-      (function () {
-        var x = FRONTLINE;
-        var socket = io.connect();
-        var videoEl = $('#videoel')[0];
-        var bookmarks = $('#bookmarks');
-        var notifications = $('#notifications');
-        var currentTime = 0.0;
-        var id;
-        socket.emit(x.CONNECT, function (myId) {
-          id = myId;
-          $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
-        });
-
-        socket.on(x.CONNECTED, function() {
-          $('#qr-container').animate({'top': -400}, function() {
-            $(this).hide();
-            $('#shade').fadeIn();
-            $('#video-container').fadeIn(function () {
-              videoEl.play();
-            });
-          });
-          setInterval(function() { if (currentTime != videoEl.currentTime) {
-            socket.emit(x.TIMECODE, currentTime = videoEl.currentTime) } }, 200);
-          setDuration();
-        });
-
-        socket.on(x.BOOKMARK, function(time) {
-          bookmarks.append("<li>" + x.TIME_TO_CODE(time) + '</li>');
-          var notification = $(document.createElement('li')).append("Added bookmark: " + x.TIME_TO_CODE(time) + "<br />\"" + x.GET_TEXT_FOR_TIME(time) + "\"");
-          notifications.append(notification);
-          setTimeout(function() { notification.animate({'opacity':0}, function () {
-            $(this).slideUp();
-          })}, 2000);
-        });
-
-        socket.on(x.SCAN, function(time) {
-          videoEl.currentTime = time;
-        });
-
-        socket.on(x.PLAY, function() {
-          videoEl.play();
-        });
-
-        socket.on(x.PAUSE, function() {
-          videoEl.pause();
-        });
-
-        function setDuration() {
-          socket.emit(x.DURATION, videoEl.duration);
-        }
-
-      })();
-
-    </script>
+    <script src="/desktop.js"></script>
   </body>
 </html>
