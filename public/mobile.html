@@ -159,7 +159,7 @@
       paused = false;
       socket.emit('play');
     } else {
-      paused = false;
+      paused = true;
       socket.emit('pause');
     }
   });
