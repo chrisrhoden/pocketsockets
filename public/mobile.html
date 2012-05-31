@@ -102,6 +102,9 @@
     <div id="live-bookmarker">
       <span>You are watching:</span>
       <h3>Money, Power, &amp; Wall Street</h3>
+      <button id="skipBack">&laquo;</button>
+      <button id="playPause">&play.start;</button>
+      <button id="skipForward">&raquo;</button>
       <div class="progress progress-success" id='button'>
         <div class="bar btn-success" style="width: 0%;"> </div>
         <div class="timestamp">
@@ -127,6 +130,7 @@
   var currentTime = 0;
   var duration = 0;
   var id;
+  var paused = false;
   function getSessionId(hash) {
     return hash.replace('#', '');
   }
@@ -139,6 +143,24 @@
         makeLinksForTime(currentTime) +
         "</td></tr>");
     });
+  });
+
+  $('#skipBack').click(function() {
+    socket.emit('skipTo',0);
+  });
+
+  $('#skipForward').click(function() {
+    socket.emit('skipTo',duration);
+  });
+
+  $('#playPause').click(function() {
+    if (paused) {
+      paused = true;
+      socket.emit('pause');
+    } else {}
+      paused = false;
+      socket.emit('play');
+    }
   });
 
   socket.on('timeCode', function (time) {
