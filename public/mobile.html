@@ -6,182 +6,38 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <!-- Le styles -->
-    <link href="/bootstrap.css" rel="stylesheet">
-    <link href="/bootstrap-responsive.css" rel="stylesheet">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
-    <style type="text/css">
-       body, body .container { margin: 5% 2%; padding: 0; }
-      #live-bookmarker { width: 100%; }
-      #live-bookmarker a.btn { display: block; }
-      #live-bookmarker table { width: 100%; margin-top: 20px; }
-      #live-bookmarker table th, #live-bookmarker table td { text-align: left; padding: 2px 5px; }
-      #live-bookmarker div.progress { cursor:pointer;position:relative;height:80px;background-image:none;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ada), to(#6a6));-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(0,0,0,0.3);}
-      #live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); ck  -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
-      #live-bookmarker div.progress div.timestamp { position:absolute;top:20px;width:100%;text-align:center; }
-      #live-bookmarker div.progress div.timestamp span { font-size:18px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
-    </style>
-
-    <script>
-    function timeToCode(secs) {
-      var hours = Math.floor(secs / (60 * 60));
-
-      var divisor_for_minutes = secs % (60 * 60);
-      var minutes = Math.floor(divisor_for_minutes / 60);
-
-      var divisor_for_seconds = divisor_for_minutes % 60;
-      var seconds = Math.ceil(divisor_for_seconds);
-
-      return "" + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-  }
-
-  var timecodes = {
-    0:  {text:"Inside the epic story of the global crisis", links:['']},
-    34: {text:"An environment of greed and envy", links: ['']},
-    51: {text:"Obama gets a real glimpse of the future", links: ['']},
-    68: {text:"These banks transfer risk across the Atlantic", links: ['']},
-    83: {text:"Is the global financial system any safer?",  video:true}
-  }
-
-  function getTextForTime(time) {
-    return getObjectForTime(time).text;
-  }
-
-  function getObjectForTime(time) {
-    var obj = timecodes[0];
-    var timer = 0;
-    for (key in timecodes) {
-      if (time >= key) {
-        timer = key;
-        obj = timecodes[key];
-      }
-    }
-    obj['time'] = timer;
-    return obj;
-  }
-
-  function getTimeForTime(time) {
-    return getObjectForTime(time).time;
-  }
-
-  function getLinkForTime(time) {
-    var obj = getObjectForTime(time);
-    if (obj.video) {
-      return "javascript:switchVideo()";
-    } else {
-      return obj.links[0];
-    }
-  }
-
-  function makeLinksForTime(time) {
-    var str = "", obj = getObjectForTime(time);
-    str = str + " <a href='javascript:scanTo(" + obj['time'] + ")'>Go back to " + timeToCode(obj['time']) + "</a>";
-    if (obj.video)
-      str = str + " | <a href='javascript:switchVideo()'>watch additional footage</a>";
-    return str;
-  }
-  </script>
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+    <link href="/stylesheets/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/stylesheets/mobile.css" rel="stylesheet">
   </head>
   <body>
-
-<div class="container">
-
-    <div id="live-bookmarker">
-      <span>You are watching:</span>
-      <h3>Money, Power, &amp; Wall Street</h3>
-      <button id="skipBack">&laquo;</button>
-      <button id="playPause" class="pause">||</button>
-      <button id="skipForward">&raquo;</button>
-      <div class="progress progress-success" id='button'>
-        <div class="bar btn-success" style="width: 0%;"> </div>
-        <div class="timestamp">
-        <span id='time-code'>0:00:00</span> / <span id='duration'>0:00:00</span><br />
-        <span style="font-size:18px;">click to bookmark this moment</span>
+    <div class="container">
+      <div id="live-bookmarker">
+        <span>You are watching:</span>
+        <h3>Money, Power, &amp; Wall Street</h3>
+        <button id="skipBack">&laquo;</button>
+        <button id="playPause" class="pause">||</button>
+        <button id="skipForward">&raquo;</button>
+        <div class="progress progress-success" id='button'>
+          <div class="bar btn-success" style="width: 0%;"> </div>
+          <div class="timestamp">
+          <span id='time-code'>0:00:00</span> / <span id='duration'>0:00:00</span><br />
+          <span style="font-size:18px;">click to bookmark this moment</span>
+          </div>
         </div>
-      </div>
-      <table>
-        <tr class="headers">
-          <th>Moment</th>
-          <th>Info</th>
-        </tr>
-        <tbody id='bookmarks'>
-        </tbody>
-      </table>
-
-    </div><!-- #live-bookmarker -->
-
+        <table>
+          <tr class="headers">
+            <th>Moment</th>
+            <th>Info</th>
+          </tr>
+          <tbody id='bookmarks'>
+          </tbody>
+        </table>
+      </div><!-- #live-bookmarker -->
     </div>
-<script src="/base.js"></script>
-<script>
-  var x = FRONTLINE;
-  var socket = io.connect()
-  var timeCodeEl = $('#time-code');
-  var currentTime = 0;
-  var duration = 0;
-  var id;
-  var paused = false;
-  function getSessionId(hash) {
-    return hash.replace('#', '');
-  }
-
-  socket.emit(x.JOIN, getSessionId(window.location.hash), function () {
-    $('#button').click(function() {
-      socket.emit('addBookmark', currentTime);
-      $('#bookmarks').append("<tr><td>" + timeToCode(currentTime) + "</td><td>" +
-        getTextForTime(currentTime) +"<br />"+
-        makeLinksForTime(currentTime) +
-        "</td></tr>");
-    });
-  });
-
-  $('#skipBack').click(function() {
-    socket.emit(x.SCAN, 0);
-  });
-
-  $('#skipForward').click(function() {
-    socket.emit(x.SCAN, duration);
-  });
-
-  $('#playPause').click(function() {
-    var $this = $(this);
-    if ($this.hasClass(x.PAUSE)) {
-      $this.removeClass(x.PAUSE).addClass(x.PLAY);
-      socket.emit(x.PAUSE);
-    } else if ($this.hasClass(x.PLAY)) {
-      $this.removeClass(x.PLAY).addClass(x.PAUSE);
-      socket.emit(x.PLAY);
-    }
-  });
-
-  socket.on(x.TIMECODE, function (time) {
-    currentTime = time;
-
-    var percent = (time/duration) * 100;
-    $('.bar').css('width', percent + "%");
-    timeCodeEl.html(x.TIME_TO_CODE(time));
-  });
-
-  socket.on(x.DURATION, function(time) {
-    duration = time;
-    $('#duration').html(x.TIME_TO_CODE(time));
-  });
-
-  function scanTo(time) {
-    socket.emit(x.SCAN, time);
-  }
-</script>
-</body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/scripts/base.js"></script>
+    <script src="/scripts/mobile.js"></script>
+  </body>
 </html>

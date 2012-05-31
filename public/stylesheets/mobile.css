@@ -1,0 +1,10 @@
+body, body .container { margin: 5% 2%; padding: 0; }
+#live-bookmarker { width: 100%; }
+#live-bookmarker a.btn { display: block; }
+#live-bookmarker table { width: 100%; margin-top: 20px; }
+#live-bookmarker table th, #live-bookmarker table td { text-align: left; padding: 2px 5px; }
+#live-bookmarker div.progress { cursor:pointer;position:relative;height:80px;background-image:none;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ada), to(#6a6));-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset; border: 1px solid rgba(0,0,0,0.3);}
+#live-bookmarker div.progress div.bar { background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a6), to(#383)); ck  -webkit-box-shadow:0 1px 0 rgba(255, 255, 255, 0.5) inset;position:absolute;height:80px;-webkit-border-top-left-radius: 4px;-webkit-border-bottom-left-radius: 4px;}
+#live-bookmarker div.progress div.timestamp { position:absolute;top:20px;width:100%;text-align:center; }
+#live-bookmarker div.progress div.timestamp span { font-size:18px;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);color:#fff; }
+.progress.pause { background: #F00; }

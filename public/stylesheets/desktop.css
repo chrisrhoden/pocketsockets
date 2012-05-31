@@ -52,3 +52,7 @@ body {
   bottom: 0;
   right: 0;
 }
+
+video {
+  cursor: url('/images/blank.cur'),url('/images/blank.gif'),url('/images/blank.png'),url('/images/blank.xbm'),none;
+}
