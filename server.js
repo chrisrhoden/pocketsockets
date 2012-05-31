@@ -44,6 +44,7 @@ io.sockets.on('connection' , function (socket) {
   });
 
   socket.on('joinSession', function(id, callback) {
+    console.log(id);
     session = sessions[id];
     session.mobileSocket = socket;
     session.browserSocket.emit('partnerConnected', {});
@@ -59,9 +60,6 @@ io.sockets.on('connection' , function (socket) {
       });
     });
   });
-
-
-
 });
 
 function makeSessionId(sessions, length) {
