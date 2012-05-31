@@ -65,9 +65,19 @@
     text-shadow: 0 1px 0 rgba(255,255,255,0.9);
     margin: 10px;
   }
+  #shade {
+    background: #000;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
   </style>
 </head>
   <body>
+    <div id="shade"></div>
     <div id="qr-container" style="position:relative;">
       <img id="qr" />
     </div>
@@ -80,55 +90,58 @@
     <ul id="notifications"></ul>
     <script src="/base.js"></script>
     <script>
-  var x = FRONTLINE;
-  var socket = io.connect();
-  var videoEl = $('#videoel')[0];
-  var bookmarks = $('#bookmarks');
-  var notifications = $('#notifications');
-  var currentTime = 0.0;
-  var id;
-  socket.emit(x.CONNECT, function (myId) {
-    id = myId;
-    $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
-  });
+      (function () {
+        var x = FRONTLINE;
+        var socket = io.connect();
+        var videoEl = $('#videoel')[0];
+        var bookmarks = $('#bookmarks');
+        var notifications = $('#notifications');
+        var currentTime = 0.0;
+        var id;
+        socket.emit(x.CONNECT, function (myId) {
+          id = myId;
+          $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
+        });
 
-  socket.on(x.CONNECTED, function() {
-    $('#qr-container').animate({'top': -400}, function() {
-      $(this).hide();
-      $('body').css({background:"#000"})
-      $('#video-container').fadeIn(function () {
-        videoEl.play();
-      });
-    });
-    setInterval(function() { if (currentTime != videoEl.currentTime) {
-      socket.emit(x.TIMECODE, currentTime = videoEl.currentTime) } }, 200);
-    setDuration();
-  });
+        socket.on(x.CONNECTED, function() {
+          $('#qr-container').animate({'top': -400}, function() {
+            $(this).hide();
+            $('#shade').fadeIn();
+            $('#video-container').fadeIn(function () {
+              videoEl.play();
+            });
+          });
+          setInterval(function() { if (currentTime != videoEl.currentTime) {
+            socket.emit(x.TIMECODE, currentTime = videoEl.currentTime) } }, 200);
+          setDuration();
+        });
 
-  socket.on(x.BOOKMARK, function(time) {
-    bookmarks.append("<li>" + x.TIME_TO_CODE(time) + '</li>');
-    var notification = $(document.createElement('li')).append("Added bookmark: " + x.TIME_TO_CODE(time) + "<br />\"" + x.GET_TEXT_FOR_TIME(time) + "\"");
-    notifications.append(notification);
-    setTimeout(function() { notification.animate({'opacity':0}, function () {
-      $(this).slideUp();
-    })}, 2000);
-  });
+        socket.on(x.BOOKMARK, function(time) {
+          bookmarks.append("<li>" + x.TIME_TO_CODE(time) + '</li>');
+          var notification = $(document.createElement('li')).append("Added bookmark: " + x.TIME_TO_CODE(time) + "<br />\"" + x.GET_TEXT_FOR_TIME(time) + "\"");
+          notifications.append(notification);
+          setTimeout(function() { notification.animate({'opacity':0}, function () {
+            $(this).slideUp();
+          })}, 2000);
+        });
 
-  socket.on(x.SCAN, function(time) {
-    videoEl.currentTime = time;
-  });
+        socket.on(x.SCAN, function(time) {
+          videoEl.currentTime = time;
+        });
 
-  socket.on(x.PLAY, function() {
-    videoEl.play();
-  });
+        socket.on(x.PLAY, function() {
+          videoEl.play();
+        });
 
-  socket.on(x.PAUSE, function() {
-    videoEl.pause();
-  });
+        socket.on(x.PAUSE, function() {
+          videoEl.pause();
+        });
 
-  function setDuration() {
-    socket.emit(x.DURATION, videoEl.duration);
-  }
+        function setDuration() {
+          socket.emit(x.DURATION, videoEl.duration);
+        }
+
+      })();
 
     </script>
   </body>
