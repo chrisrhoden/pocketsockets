@@ -35,7 +35,8 @@
         socket.emit(x.TIMECODE, currentTime = videoEl.currentTime)
       }
       if (currentTimeCode < timeCodeArray.length &&
-          (currentTime - (x.FREQUENCY / 2)) >= timeCodeArray[currentTimeCode]) {
+          (currentTime - (x.FREQUENCY / 2000)) >= timeCodeArray[currentTimeCode]) {
+        console.log(currentTime);
         showLowerThird("Bookmark For Details", x.TIME_CODES[timeCodeArray[currentTimeCode]].text);
         currentTimeCode++;
       }
