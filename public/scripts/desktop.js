@@ -5,7 +5,16 @@
   var bookmarks = $('#bookmarks');
   var notifications = $('#notifications');
   var currentTime = 0.0;
+  var $lowerThird = $('#lower-third');
+  var ltTimeout;
+  var currentTimeCode = 0;
+  var timeCodeArray = [];
   var id;
+
+  for (codeNum in x.TIME_CODES) {
+    timeCodeArray.push(codeNum);
+  }
+
 
   // WIRE UP SOCKET EVENTS.
 
@@ -24,6 +33,11 @@
     setInterval(function () {
       if (currentTime != videoEl.currentTime) {
         socket.emit(x.TIMECODE, currentTime = videoEl.currentTime)
+      }
+      if (currentTimeCode < timeCodeArray.length &&
+          (currentTime - (x.FREQUENCY / 2)) >= timeCodeArray[currentTimeCode]) {
+        showLowerThird("Bookmark For Details", x.TIME_CODES[timeCodeArray[currentTimeCode]].text);
+        currentTimeCode++;
       }
     }, x.FREQUENCY);
 
@@ -66,5 +80,18 @@
     // WHEN WE GET OUR ID BACK, ADD THE QR CODE.
     $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
   });
+
+  var showLowerThird = function (headline, text) {
+    $('h1', $lowerThird).text(headline);
+    $('h2', $lowerThird).text(text);
+    if ($lowerThird.is(":visible")) {
+      clearTimeout(ltTimeout);
+      setTimeout(function () { $lowerThird.slideUp() }, x.LT_DURATION);
+    } else {
+      $lowerThird.slideDown(function () {
+        ltTimeout = setTimeout(function () { $lowerThird.slideUp() }, x.LT_DURATION );
+      });
+    }
+  }
 
 })();
