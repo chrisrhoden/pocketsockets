@@ -11,14 +11,14 @@
   var timeCodeArray = [];
   var id;
 
-  for (codeNum in x.TIME_CODES) {
-    timeCodeArray.push(codeNum);
-  }
-
-
   // WIRE UP SOCKET EVENTS.
 
   socket.on(x.CONNECTED, function() {
+
+    for (codeNum in x.TIMECODES) {
+      timeCodeArray.push(parseInt(codeNum));
+    }
+
 
     // HIDE QR CODE AND PLAY
     $('#qr-container').animate({'top': -400}, function() {
@@ -35,9 +35,9 @@
         socket.emit(x.TIMECODE, currentTime = videoEl.currentTime)
       }
       if (currentTimeCode < timeCodeArray.length &&
-          (currentTime - (x.FREQUENCY / 2000)) >= timeCodeArray[currentTimeCode]) {
-        console.log(currentTime);
-        showLowerThird("Bookmark For Details", x.TIME_CODES[timeCodeArray[currentTimeCode]].text);
+          (currentTime) >= timeCodeArray[currentTimeCode]) {
+        text = x.TIMECODES[timeCodeArray[currentTimeCode]].text;
+        showLowerThird(x.CTA_MARK, text);
         currentTimeCode++;
       }
     }, x.FREQUENCY);
@@ -79,6 +79,7 @@
   socket.emit(x.CONNECT, function (myId) {
     id = myId;
     // WHEN WE GET OUR ID BACK, ADD THE QR CODE.
+    $('#link').attr('href', "http://" + window.location.host + "/mobile.html#" + id);
     $('#qr').attr("src", "http://chart.googleapis.com/chart?cht=qr&chs=150x150&choe=UTF-8&chld=H&chl=" + "http://" + window.location.host + "/mobile.html%23" + id);
   });
 

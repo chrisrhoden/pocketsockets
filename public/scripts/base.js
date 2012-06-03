@@ -11,6 +11,7 @@ window.FRONTLINE = {
   , FREQUENCY   : 500 // How often we send progress to mobile devices, in ms.
   , LT_DURATION : 6000
   , TR_DURATION : 3000
+  , CTA_MARK    : "Details Available"
   , TIMECODES : {
       30:  {text:"Timeline: Inside the Meltdown", links: ['http://www.pbs.org/wgbh/pages/frontline/meltdown/cron/']},
       70:  {text:"The Appetite for Subprime Mortgages", links: ['http://www.pbs.org/wgbh/pages/frontline/oral-history/financial-crisis/tags/subprime-mortgages/']},
